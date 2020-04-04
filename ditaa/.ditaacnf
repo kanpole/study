@@ -1,0 +1,25 @@
+(setq org-ditaa-jar-path "~/plugin/ditaa/ditaa0_9.jar")
+(add-hook 'org-babel-after-execute-hook 'org-display-inline-images 'append)
+
+;;(org-babel-do-load-languages (quote org-babel-load-languages) (quote ( (ditaa . t))))
+
+(org-babel-do-load-languages
+    (quote org-babel-load-languages)
+           (quote
+            (
+                (emacs-lisp . t)
+                (dot . t)
+                (ditaa . t)
+                (R . t)
+                (python . t)
+                (ruby . t)
+                (gnuplot . t)
+                (clojure . t)
+                (ledger . t)
+                (org . t)
+                (latex . t)
+            )))
+
+;; org mode do not prompt me
+(setq org-confirm-babel-evaluate nil)
+(setq org-src-fontify-natively t)

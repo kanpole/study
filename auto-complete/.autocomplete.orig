@@ -1,0 +1,9 @@
+(require 'auto-complete)
+(require 'auto-complete-config)
+
+;;开启全局模式
+(global-auto-complete-mode t)
+
+;;添加词典路径
+(add-to-list 'ac-dictionary-directories "~/plugin/auto-complete/dict")
+(ac-config-default)

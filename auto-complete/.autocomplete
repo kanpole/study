@@ -1,0 +1,120 @@
+(require 'auto-complete)
+(require 'auto-complete-config)
+
+;;开启全局模式
+(global-auto-complete-mode t)
+
+;;添加 主模式词典和扩展字典 目录
+(add-to-list 'ac-dictionary-directories "~/plugin/auto-complete/dict")
+(ac-config-default)
+
+;;设定字符串字典
+;;(setq ac-user-dictionary '("kanpole@live.com" "zhaifeisi@gmail.com"))
+
+;;设定字符串字典文件目录,是一个列表
+(add-to-list 'ac-user-dictionary-files "~/plugin/dict/.dict")
+
+
+;;三个字符才开始补全
+(setq ac-auto-start 3)
+
+;;使用quick-help
+(setq ac-use-quick-help t)
+(setq ac-quick-help-delay 0.5)
+
+;;停留几秒后显示
+(setq ac-auto-show-menu 0.8)
+
+;;设置tab键的模式
+(setq ac-dwim t)
+
+;;使用fuzzy功能
+(setq ac-fuzzy-enable t)
+
+;;菜单
+(setq ac-menu-height 12)
+(set-face-background 'ac-candidate-face "lightgray")
+(set-face-underline 'ac-candidate-face "darkgray")
+(set-face-background 'ac-selection-face "steelblue")  
+
+(setq ac-use-menu-map t)
+(define-key ac-completing-map "\C-n" 'ac-next)
+(define-key ac-completing-map "\C-p" 'ac-previous)
+;;设置补全快捷键
+(global-set-key "\M-/" 'auto-complete)
+
+(defun my-etags-hook ()
+  (interactive)
+  "Function to be called when entering into c-mode."
+  (when (and (require 'auto-complete nil t)
+             (require 'auto-complete-config nil t))
+    (make-local-variable 'ac-sources)
+    (setq ac-sources
+          '(ac-source-words-in-same-mode-buffers ac-source-dictionary))
+    (when (require 'auto-complete-etags nil t)
+      (add-to-list 'ac-sources 'ac-source-etags)
+      (setq ac-etags-use-document t))))
+
+(defun java-etags-table-list ()
+  "添加一个tags文件到列表中"
+  (add-to-list 'tags-table-list "~/tags/JAVATAGS")
+  (setq tags-file-name (car tags-table-list))
+  )
+
+(defun c-etags-table-list ()
+  "添加一个tags文件到列表中"
+   (add-to-list 'tags-table-list "~/tags/JAVATAGS")
+   )
+
+(add-hook 'c-mode-common-hook #'my-etags-hook)
+(add-hook 'java-mode-hook #'my-etags-hook)
+(add-hook 'java-mode-common1-hook #'java-etags-table-list)
+(add-hook 'java-mode-hook #'c-etags-table-list)
+
+
+(defun lev/find-tag (&optional show-only)
+  "Show tag in other window with no prompt in minibuf."
+  (interactive)
+  (let ((default (funcall (or find-tag-default-function
+                              (get major-mode 'find-tag-default-function)
+                              'find-tag-default))))
+    (if show-only
+        (progn (find-tag-other-window default)
+               (shrink-window (- (window-height) 12)) ;; 限制为 12 行
+               (recenter 1)
+               (other-window 1))
+      (find-tag default))))
+
+(defun sucha-generate-tag-table ()
+  "Generate tag tables under current directory(Linux)."
+  (interactive)
+  (let 
+      ((exp "")
+       (dir ""))
+    (setq dir
+          (read-from-minibuffer "generate tags in: " default-directory)
+          exp
+          (read-from-minibuffer "suffix: "))
+    (with-temp-buffer
+      (shell-command
+       (concat "find " dir " -name \"" exp "\" | xargs etags ")
+       (buffer-name)))))
+
+(defun sucha-release-small-tag-window ()
+  "Kill other window also pop tag mark."
+  (interactive)
+  (delete-other-windows)
+  (ignore-errors
+    (pop-tag-mark)))
+
+(global-set-key [(f7)] 'visit-tags-table)
+(global-set-key [C-f7] 'sucha-generate-tag-table)
+(global-set-key [(control .)] '(lambda () (interactive) (lev/find-tag t)))
+(global-set-key [(control \,)] 'sucha-release-small-tag-window)
+(global-set-key [(meta .)] 'lev/find-tag)
+(global-set-key [(meta \,)] 'pop-tag-mark)
+(global-set-key (kbd "C-M-,") 'find-tag)
+(define-key lisp-mode-shared-map [(shift tab)] 'complete-tag)
+(add-hook 'c-mode-common-hook      ; both c and c++ mode
+          (lambda ()
+            (define-key c-mode-base-map [(shift tab)] 'complete-tag)))
