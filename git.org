@@ -1,0 +1,22 @@
+#+TITLE: git学习及操作
+
+* 常见用法
+
+  ** 将一个现有项目关联到远程分支
+     1) git init 
+        *初始化*
+     2) git remote add origin https://username:password@github.com/username/project
+        *设置远程仓库地址*
+     3) git checkout -b branchname
+        *在本地创建新分支*
+        1) git pull origin branchname
+           *如果本地没有文件,可以拉取远程分支*
+        2) git branch --set-upstream-to=origin/branchname branchname
+           *关联分支*
+
+     4) git add .
+        *添加追踪*
+     5) git commit
+        *提交到本地仓库*
+     6) git push 
+        *上传到远程仓库*
