@@ -1,0 +1,64 @@
+#+TITLE: 手动构建APK
+
+* 配置环境
+  1) JAVA_HOME/java sdk 1.8
+  2) ANDROID_SDK/android_sdk
+  3) ANDROID_NDK/android_ndk 
+     暂时不用
+  4) CLASSPATH
+     .;%JAVA_HOME%/jre/lib;%JAVA_HOME%/lib;%JAVA_HOME%/lib/tools.jar
+     如果以及配置JAVA_HOME则不需要这个
+  5) PATH
+     将上面的1,2,3附带的可执行文件目录添加进path环境变量里
+* 测试环境
+  1) android -h
+     查看帮助
+  2) android list target
+     查看可用的安卓版本
+  3) android list avd
+     查看已经创建的虚拟机
+  4) android create avd --name name --target targetID
+     创建一个虚拟机
+  5) emulator -avd name
+     运行虚拟机
+* 创建&编译android项目
+  1) android create project -n 项目名 -k 包名 -a activity名 -t android版本的id -p 存放的项目的路径
+     创建一个安卓项目
+  2) mkdir build build/gen build/bin build/class
+     创建构建用的目录
+  3) aapt package -f -M AndroidManifest.xml -I "%ANDROID_SDK%/platforms/android-N/android.jar" -S res -J build/gen/ -m
+     生成R文件
+     1) -f 表示强制覆盖
+     2) -M AndroidManifest.xml文件
+     3) -I android.jar路径
+     4) -S 资源文件res路径
+     5) -J 生成的R.java的输出路径
+     6) -m 让生成的包目录放在 -J参数指定的目录下
+  4) aidl -Isrc src/main/aidl.....
+     如果有,将aidl文件编译成java文件
+  5) javac -source 1.8 -target 1.8 -encoding UTF-8 -bootclasspath "%ANDROID_SDK%/pladforms/android-N/android.jar" -d build/class
+     src/*.java
+     build/gen/*.java
+     生成class文件
+  6) dx --dex --output=build/classes.dex build/class
+     生成安卓虚拟机可执行文件,如果过大,则会出现多个dex文件
+  7) aapt package -f -M AndroidManifest.xml -I 安卓平台的android.jar -S res -A assets(如果有的话) -F build/resources
+     生成资源映射表
+  8) aapt package -f -M AndroidManifest.xml -I android.jar -S res -a assets -F build/res.apk
+     生成资源apk,和上面一样只是名字变成了apk,它们里面只包含资源和编译后的xml,并没有可执行文件
+  9) java -classpath "%ANDROID_SDK%/tools/lib/sdklib.jar"
+     com.android.sdklib.build.ApkBuilderMain build/res.apk -v -u -z build/resources -f  build/classes.dex
+     将可执行代码打包进apk里
+  10) jarsigner -verbose -keystore .android/debug.keystore -storepass android -keypass android build/res.apk androiddebugkey
+      给apk签名,已经可以安装使用了
+  11) zipalign -f 4 build/res.apk build resalign.apk
+      优化apk,4字节对齐
+  12) adb install -r build/resalign.apk
+      覆盖安装
+  13) adb shell am -start -n com.xx.xx/Activityname
+      启动软件主界面
+
+
+
+
+
