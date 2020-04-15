@@ -1,0 +1,13 @@
+#+TITLE: 说明
+
+  *每个分支即为一个类型*
+
+* java&Android
+  *java%Android 的学习记录*
+
+* emacslisp分支
+  *emacslisp 分支是本人的emacs编辑器的配置文件*
+
+* git分支
+  *git 的学习记录*
+
