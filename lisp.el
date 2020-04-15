@@ -79,12 +79,23 @@
 
 (defun set-path (strname listval)
   "设置自定义环境变量;变量名,路径列表"
+  (setenv strname)
   (mapcar #'(lambda (object)
-              (or (string= object (getenv strname))
+              (or (search object (getenv strname))
                   (setenv strname (concat  object ";" (getenv strname)))
                   ))
           listval)
   (getenv strname)
+  )
+
+
+(defun add-path (strname listval)
+  "设置自定义环境变量;变量名,路径列表"
+  (mapcar #'(lambda (object)
+              (or (search object (getenv strname))
+                  (setenv strname (concat  object ";" (getenv strname)))
+                  ))
+          listval)
   )
 
 (defun create-program (proname &optional path type)
