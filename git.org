@@ -18,5 +18,5 @@
         *添加追踪*
      5) git commit
         *提交到本地仓库*
-     6) git push 
+     6) git push origin branch
         *上传到远程仓库*
