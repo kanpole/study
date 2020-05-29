@@ -52,7 +52,7 @@
     (setq ac-sources
           '(ac-source-words-in-same-mode-buffers ac-source-dictionary))
     (when (require 'auto-complete-etags nil t)
-      (add-to-list 'ac-sources 'ac-source-etags)
+      (add-to-list 'ac-sources 'ac-source-etags 'ac-source-ctags)
       (setq ac-etags-use-document t))))
 
 (defun java-etags-table-list ()
@@ -63,13 +63,13 @@
 
 (defun c-etags-table-list ()
   "添加一个tags文件到列表中"
-   (add-to-list 'tags-table-list "~/tags/JAVATAGS")
+   (add-to-list 'tags-table-list "~/tags/CPPTAGS")
    )
 
 (add-hook 'c-mode-common-hook #'my-etags-hook)
 (add-hook 'java-mode-hook #'my-etags-hook)
 (add-hook 'java-mode-common1-hook #'java-etags-table-list)
-(add-hook 'java-mode-hook #'c-etags-table-list)
+(add-hook 'java-mode-hook #'java-etags-table-list)
 
 
 (defun lev/find-tag (&optional show-only)

@@ -7,6 +7,7 @@
 
 (add-default-execable-path-list
  (concat-path-home '(
+                     "sdk/VC/bin/amd64"
                     "bin"
                     "other/git/bin"
 		    "other/git/"
@@ -19,6 +20,7 @@
                    (getenv "EMACS_HOME")))
 
 (add-default-execable-path-list (list (expand-file-name "system32" (getenv "SystemRoot"))))
+(add-default-execable-path-list (list (expand-file-name "SysWOW64" (getenv "SystemRoot"))))
 
 (set-path "PATH" *default-execable-path*)
 
