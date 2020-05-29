@@ -5,4 +5,260 @@
   2) strictfp加在方法或者类名前表示需要使用严格的浮点计算
   3) StrictMath数学库类,用于保证所有是数学方法在不同平台的结果都是一样的
   4) >>>用0填充高位,>>用符号位填充高位,没有<<<运算符
+  5) 在嵌套块中不允许定义重名变量
+  6) int[][] n = new int[n][]可以创建一个不规则数组,也就是一堆指针,然后可以自己去接着为里面的指针值赋值
+  7) 一个源文件中只能有一个公有类，但是可以有多个非公有类
+  8) 所有方法必须在类内部定义
+  9) 静态方法不能访问实例域，但可以访问静态域
+  10) 可以使用对象调用静态域，不过还是使用类名调用比较好
+  11) 基本数据类型是按值传递，而对象是按引用传递，注意：并非c++那种引用
+  12) this()可以在类构造器中调用另一个类构造器
+  13) 类中可以有初始化块，可以看作一个匿名的方法，每次构造对象时都会调用，static{}是静态初始化块
+  14) finalzer方法可以在对象被垃圾回收器回收之前做一些操作
+  15) import static java.lang.System.*;可以导入静态方法或域
+  16) 如果不带修饰符默认是包可见
+  17) classpath指定类路径
+  18) javadoc可以根据/** 的注释来生成文档
+  19) 可变参数Object... obj 相当于 Object[] obj数组,对于基本数据类型将自动装箱
+  20) 枚举实际上是一个类,每个枚举值都是一个对象
+      1) 可以为枚举定义构造器,方法,和域
+         #+BEGIN_SRC 
+         public enum Size{
+           SMALL("S"),MEDIUM("M")...;
+           public String fun(){...};
+         }
+         #+END_SRC
 
+      2) 所有枚举都是Enum的子类
+  21) 所有类型包括基本类型都继承自Object
+  22) 接口不能创建实例,但是创建接口变量引用子类实例
+  23) instanceof用来检测一个类对象的继承关系
+  24) 接口不能有实例域或者静态方法,但可以包含常量所有的变量都会自动加上public static final 成为常量
+  25) 接口也可以被继承扩展
+  26) 抽象类可以有自己的实例域和方法,只是不能创建对象
+  27) 内部类可以访问外部类的所有实例域,通过特殊方式,当然其他类也可以显示的通过外部类.内部类来调用内部类
+  28) 局部内部类无法使用修饰符,因为被限定在局部,而且局部类能访问外部类的所有实例域,以及局部变量,但是必须被声明为final
+  29) 匿名内部类,省略类名可以直接定义方法,可以直接实现接口而不需要重新编写一个类名
+      1) 由于构造器的名字必须与类名相同,而匿名类没有类名也就没有构造器,所以匿名类的参数被传给他的超类
+      2) class name = new class("val"){....}
+  30) 双括号初始化fun(new array(){{add("name");add("age");}})用来快速构建对象
+  31) new class(){}.getClass().getEnclosingClass();可以在静态方法中获得包含该静态方法的类
+  32) 静态内部类除了不能访问外围类对象的特权之外与内部类一样,简单来说就是静态内部类不会创建额外的外围类对象,所以无法访问外部类
+  33) 接口中的内部类自动成为static和public,但是可以显示声明为非公有
+  34) 只有内部类能声明为静态类,因为最外层的类声明静态的没有意义,它本来就没有外围类,也就根本不会生成外围类的对象了
+  35) 代理可以在运行时创建一个实现了一组给定接口的新类;令一个意义是需要使用一个接口但是又不需要实现这个接口的全部方法时可以只实现需要的方法
+      1) 继承接口 invocationHandler,并实现invoke(Object,Method,Object[])方法
+      2) 代理类一旦创建与常规类没有区别
+      3) 代理类可以是实现那种需要在调用一个类对象的方法之前或者之后要做一些事的那种情况
+      4) 代理类扩展自Proxy,并且只能有一个实例域,即代理的对象
+      5) 对于特定的类加载器和预设的一组接口来说只能有一个代理类
+      6) 代理类一定是public和final
+      7) 代理的接口都是public的,那么代理类就不属于特定的包,否则,非公有的接口都必须属于同一个包,并且该代理类也要属于这个包
+      8) Proxy.isProxyClass()检测对象是否代表一个代理类
+      9) invoke()代理对象被调用时执行的方法
+      10) getProxyClass()返回实现指定接口的代理类
+      11) newProxyInstance()构造一个实现指定接口的代理类实例,其中所有的接口方法都被实现为调用invoke方法
+  36) 适配器可以立即为,一个中间类实现了一个接口中的所有方法,其实现为空方法等,然后可以再扩展这个中间类,实现自己想要的方法
+  37) 文件和内部类的关系
+      1) 一个文件只能有一个公有类,但是可以有多个包可见的常规类
+      2) 虚拟机中没有私有类的概念,所以java中的内部类和局部类都会被编译为一个带有私有构造的并以父类为参数的构造方法,然后再提供一个其他构造方法调用
+      3) 内部类如果引用外部类的私有变量,编译器会在外部类生成相应的方法,并且在内部类增加相应的实力域
+      4) 局部类如果要引用局部变量,那么局部变量必须声明为final,然后编译器会在内部类生成相应的final实例域用来存储该变量,其他行为和内部类一样
+      5) 如果不想内部类生成外部类的引用,那么可以将外部类声明为static,那么编译器就不会为外部类生成相应的外部类引用域了
+      6) 只有内部类可以声明为private和public 加static 的
+      7) 除了主类,常规类和局部类什么都不能加,必须是包可见
+
+* 泛型
+  1) 类的泛型是类名后加class<T,U....>
+  2) 方法的泛型是返回值前加<T> T fun(T... v)
+     1) 使用泛型类的静态方法时,类名.<T>fun();
+  3) 泛型类型会擦除,所有的类名前或者方法名前的类型都会被擦除,然后所有使用该类型定义的变量或者方法全部用其第一个限定超类替换,如果没有显示限定就是object类
+  4) 泛型是定义是会被继承的
+  5) 不能用基本类型来作为泛型的实例类型,泛型擦除后基本类型是object,object是对象类型,而基本类型不是继承自Object,不能直接使用基本类型赋值,除非自动装箱
+  6) 不能实例化类型变量,即 不能使用new T();
+  7) 可以声明具体类型的泛型数组,但是不能new出来
+     1) 可以使用SuperWraing("unchecked") 
+        1) class<class>[] name = new (class<class>[])new class<?>[n]
+     2) 上面强制创建一个不安全的泛型的实例数组
+     3) class<?>[] name  = new class<?>[10];是可以的
+  8) 泛型类中,类型变量在其内的静态上下文中无效
+  9) @SafeVaragers可以声明此方法参数的转换是安全的,跳过编译器检查
+  10) 对泛型实例进行运行时检查其实就是对所有泛型进行原始类型检查,所以比较结果一直为true
+  11) 通配符类型,用来进行泛型限定,而不用指定具体泛型
+      1) ? extends class 限定为此类型的子类型 用于get
+      2) ? super class 限定为此类型的超类型   用于set
+      3) ?可以不限定子类或者超类而直接使用 如:? getval() 但是因为不知道具体类型所以只能将返回值赋值给object
+      4) 通配符类型和正常发泛型类型一样,不能用其创建实例
+* 集合
+  ** List,基础数据结构
+     1) ArrayList 用数组进行实现
+     2) LinkedList 用链表进行实现
+     3) 有iterator和ListIterator迭代器实现
+        1) 前者只能正向遍历,并且只能在最后插入
+        2) 后者可以双向
+        3) 对于Linked随机遍历,get和set非常低效
+        4) 后者的add方法添加到当前所处位置,而前者总是插入到最后
+
+     4) 存储的顺序是可控的
+     5) java中的链表是双向链表
+
+  ** Hash Table散列表 基础数据结构Set集
+    1) 散列表是用某个方法计算出来的一堆整数,然后与桶总数取余得到桶的索引
+    2) 集只能查询是否存在,而不能获得精确副本
+    3) 所有相同的元素在桶中用链表链接
+    4) 存储顺序不可控,访问快速,如果修改桶中数据,就需要重新散列此数据并找到新位置存储
+       1) HashSet 查找与添加快速,不关心顺序,不能查找指定位置,只能用contains去测试数据是否存在
+       2) TreeSet 顺序的散列集,能记住插入的顺序,使用红黑树实现
+          1) 树集可以传入函数对象,自定义比较器,继承自Compartor
+  ** Queue 和 Deque 队列  PriorityQueue优先级队列
+     1) 先进先出型数据结构,内部通常用链表或者数组实现
+     2) 只能以固定顺序去操作元素,不能随机存取
+  ** map 映射表 HashMap 和 TreeMap
+    1) 可以获得精确副本,根据键获得桶,然后再在桶中存储数据
+    2) HashMap与TreeMap的行为跟集一样,前者不关心顺序,快一些,后者会按顺序排列
+    3) 键值都是唯一的,新值会替换老值
+    4) 可以获得映射表的键值set集
+  ** LinkedHashSet和LinkedHashMap用来记住它们数据的插入顺序
+    1) 但是还是不能随机访问,只能打印它们的存储顺序
+  ** 标识散列映射表IdentityHashMap  他的实现方式比较暴力,直接用==判断相等性,也就是直接按内存比较
+
+
+* 多线程
+
+** Thread
+  1) Thread r =new Thread(new Runnable(){public void run(){}});创建一个线程执行任务
+  2) r.start()
+  3) 也可以构建一个Thread的子类来定义一个线程
+  4) 直接调用run方法会执行同一个线程中的任务,而不会创建新任务
+  5) Thread.currentThread方法可以获得当前线程
+  6) 实例方法isinterrupted能检测当前线程的中断位是否被置位
+  7) Thread.interrupted方法能检测调用这个方法所在的线程是否被置位,并且清除置位
+  8) 用Thread实例对象调用interrupt方法可以置位实例对象的中断位
+  9) getState();可以一个实例线程的状态
+  10) join()和join(int)实例方法 可以等待一个线程的死亡
+  11) setDaemon(boolen)设置为守护线程
+  12) Thread.setDefaultUncaughtExceptionHandler()为所有线程设置一个默认的未捕获异常处理器
+  13) getDefaultUncaughtExceptionHandler()获取默认的异常处理器
+  14) setUncaughtExceptionHandler()为一个线程设置默认的异常处理器
+  15) uncaughtException()自定义的异常处理器
+  
+
+** 同步
+*** 临界区锁Lock
+  1) java.util.concurrent.locks.*;包
+     #+BEGIN_SRC java
+     Lock lock = new ReentrantLock();
+     lock.lock();
+     do something;
+     lock.unlock();
+     #+END_SRC
+  2) ReentrantLock({boolen})创建一个可重入的锁,或者一个带有公平策略的可重入锁
+  3) tryLock()可以尝试获得锁,也可以传入一个时间,此函数不会阻塞
+  4) lockinterruptibly()相当于无限获得锁的tryLock()
+  5) tryLock如果尝试获得锁的时候发生中断,那么会返回中断异常
+*** 条件对象Condition,已经获得锁,但是还是不能往下运行的线程,需要等待某个条件的发生,放弃该锁
+    #+BEGIN_SRC java
+    Lock lock = new ReentrantLock();
+    Condition condlock = lock.newCondition();//获得锁的条件对象
+
+    condlock.await();等待该对象
+    condlock.signalAll();唤醒所有阻塞线程
+    condlock.signal();随机唤醒一个线程
+    #+END_SRC
+    1) await()可以设定超时时间,如果等待时发生中断,抛出中断异常
+    2) awaitUninterruptibly(),如果发生中断,不抛出异常继续等待
+*** synchronized关键字
+    1) 相当于在方法内部获得对象的内部锁的条件对象
+    2) wait和notifyAll/notify等待或唤醒,在synchroized方法中调用
+    3) 要使用条件对象必须先持有锁
+    4) 同步阻塞
+       #+BEGIN_SRC 
+       synchronized(Object){...}
+       可以用于对象,来使用对象的内部锁
+       #+END_SRC
+*** AtomicInteger/Boolean/Long等
+    1) incrementAndGetdecrementAndGet以原子方式自增/自减一个整数
+*** ThreadLocal线程局部变量,为调用方法的每个线程创建一个线程专属的变量实例
+    #+BEGIN_SRC java
+    public static final ThreadLocal<class> data = new ThreadLocal<class>(){
+      protected class initialValue(){
+        return new class();
+      }
+    };
+    class obj = data.get().fun();
+    
+    其中class是创建的类型,fun是此类下的方法
+    每次调用上面的表达式都会创建一个线程专属的变量
+    #+END_SRC
+    1) 还有set和remove方法
+*** ReentrantReadWriteLock读写锁    
+    #+BEGIN_SRC java
+    ReentrantReadWriteLock rwlock = new ReentrantReadWriteLock();
+    Lock readlock = rwlock.readLock();
+    Lock writeLock = rwlock.writeLock();
+    
+    readlok.lock();
+    writelock.lock();
+    #+END_SRC
+*** 阻塞队列
+    1) ArrayBlockingQueue<E>指定容量的可以设置公平性的阻塞队列,数组实现
+    2) LinkedBlockingQueue/LinkedBlockingDeque无容量上限的阻塞队列,链表实现
+    3) DelayQueue带有时长的阻塞队列用getDelay()获取对象的延迟
+    4) PoriorityBlockingQueue<E>优先级阻塞队列
+*** 线程安全集合
+    1) ConcurrentHashMap/ConcurrentSkipListMap/ConcurrentSkipListSet/ConcurrentLinkedQueue
+    2) CopyOnWriteArrayList/set写时数组拷贝
+    3) List<E>/Map<K,V> list = Collections.synchronizedList/Map(new ArrayList<E>/HashMap<k,v>)
+       通过使用包装器可以将非同步集合变成同步的,但是迭代器访问仍然是非同步的
+*** Callable与Future
+    1) Callable<V>与Runnable不同,它有返回值
+       #+BEGIN_SRC java
+       new Callable<T>(){
+       T call() throws Exception;
+       }
+       #+END_SRC
+
+    2) Future<V>可以保存函数运行的结果,可以在主调线程需要时取回
+       #+BEGIN_SRC java
+       new Future<V>(){
+       V get() throws
+       V get(long,TimeUnit) throws
+       void cancel(long)
+       boolean isCancelled()
+       boolean isDone()
+       }
+       #+END_SRC
+
+    3) FutureTask包装器可以将Callable转换成Future和Runnable
+*** 执行器
+    1) newCachedThreadPool必要时创建新线程,用完后会保留60秒
+    2) newFixedThreadPool 创建固定容量的线程池
+    3) newSingleThreadExecutor只有一个线程的线程池
+    #+BEGIN_SRC java
+    ExecutorService pool = Executors.newCachedThreadPool()
+    pool.submit(Runnable or Callable);
+    poll.shutdown/Now
+    #+END_SRC
+    4) ScheduledExecutorService 预定执行任务,到时自动执行或重复执行
+       1) newScheduledThreadPool  线程池
+       2) newSingleThreadScheduledExecutor 单线程
+    5) ExecutorCompletionService完成服务
+*** Fork-Join框架 自定义类覆盖RecursiveTask<V>可以生成结果,RecursiveAction不生产结果 覆盖computer方法
+    #+BEGIN_SRC java
+
+    ForkJoinPool pool = new ForkJoinPool()
+    pool.invoke(myclassobj);
+    
+    protected V computer(){
+      myclass one =..
+      myclass two=..
+      invokeAll(one,two);
+      return one.join()+two.join();
+    }
+    #+END_SRC
+*** 同步器
+    1) CyclicBarrier 用于同步多个线程到指定地方,然后统一放行
+    2) CountDownLatch 等到某个事件的发生结果达到指定此数
+    3) Exchanger 用与一边写一边读
+    4) Semaphore 相当于信号灯
+    5) SynchronousQueue 用于队列的存取操作
